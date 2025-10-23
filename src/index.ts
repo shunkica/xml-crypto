@@ -6,3 +6,6 @@ export {
 export { SignedXml } from "./signed-xml";
 export * from "./types";
 export * from "./utils";
+
+// XmlValidator export added
+export { XmlValidator } from "./xml-validator";
