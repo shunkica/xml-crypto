@@ -209,6 +209,31 @@ Note:
 
 The xml-crypto api requires you to supply it separately the xml signature ("&lt;Signature&gt;...&lt;/Signature&gt;", in loadSignature) and the signed xml (in checkSignature). The signed xml may or may not contain the signature in it, but you are still required to supply the signature separately.
 
+### Secure Verification with XmlDSigVerifier (Recommended)
+
+For a more secure and streamlined verification experience, use the `XmlDSigVerifier` class. It provides built-in checks for certificate expiration, truststore validation, and easier configuration.
+
+```javascript
+const { XmlDSigVerifier } = require("xml-crypto");
+const fs = require("fs");
+
+const xml = fs.readFileSync("signed.xml", "utf-8");
+const publicCert = fs.readFileSync("client_public.pem", "utf-8");
+
+const result = XmlDSigVerifier.verifySignature(xml, {
+  keySelector: { publicCert: publicCert },
+});
+
+if (result.success) {
+  console.log("Valid signature!");
+  console.log("Signed content:", result.signedReferences);
+} else {
+  console.error("Invalid signature:", result.error);
+}
+```
+
+For detailed usage instructions, see [XMLDSIG_VERIFIER.md](./XMLDSIG_VERIFIER.md).
+
 ### Caring for Implicit transform
 
 If you fail to verify signed XML, then one possible cause is that there are some hidden implicit transforms(#).  
